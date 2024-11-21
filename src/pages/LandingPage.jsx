@@ -240,7 +240,7 @@ const LandingPage = () => {
           {categories.map((category) => (
             <CategoryCard
               key={category.name}
-              to={`/category/${category.name.toLowerCase()}`}
+              to={`/etc/#${category.name.toLowerCase()}`}
               theme={theme}
             >
               <h3>{category.name}</h3>

@@ -30,7 +30,7 @@ export const ProjectPostsSummary = [
     date: "2024-03-05",
     summary: "프로젝트3의 보안을 강화하는 방법에 대해 알아봅니다.",
     tags: ["프로젝트", "보안", "강화"],
-    contentPath: "/posts/project/project3.md",
+    contentPath: `${import.meta.env.BASE_URL}/posts/project/project3.md`,
   },
   {
     id: 4,
@@ -41,7 +41,9 @@ export const ProjectPostsSummary = [
     date: "2024-11-07",
     summary: "조건부 렌더링 성능 최적화에 대해 알아봅니다.",
     tags: ["React", "성능", "최적화", "디바운스", "스로틀"],
-    contentPath: "/posts/project/DebounceAndThrottle.md",
+    contentPath: `${
+      import.meta.env.BASE_URL
+    }/posts/project/DebounceAndThrottle.md`,
   },
   {
     id: 5,
@@ -52,7 +54,9 @@ export const ProjectPostsSummary = [
     date: "2024-11-03",
     summary: "무한스크롤 구현으로 데이터를 불러오는 방법에 대해 알아봅니다.",
     tags: ["React", "무한스크롤", "커스텀훅", "성능"],
-    contentPath: "/posts/project/InfiniteScrollPagination.md",
+    contentPath: `${
+      import.meta.env.BASE_URL
+    }/posts/project/InfiniteScrollPagination.md`,
   },
   {
     id: 6,
@@ -63,7 +67,7 @@ export const ProjectPostsSummary = [
     date: "2024-06-21",
     summary: "드래그 앤 드롭과 리사이징",
     tags: ["React", "react-rnd", "드래그앤드롭", "리사이징"],
-    contentPath: "/posts/project/ReactRnd.md",
+    contentPath: `${import.meta.env.BASE_URL}/posts/project/ReactRnd.md`,
   },
   {
     id: 7,
@@ -74,7 +78,7 @@ export const ProjectPostsSummary = [
     date: "2024-06-21",
     summary: "Google Analytics 4 연동하기",
     tags: ["React", "Google Analytics 4", "GA4"],
-    contentPath: "/posts/project/GA4.md",
+    contentPath: `${import.meta.env.BASE_URL}/posts/project/GA4.md`,
   },
   {
     id: 8,
@@ -85,6 +89,8 @@ export const ProjectPostsSummary = [
     date: "2024-06-21",
     summary: "데이터 시각화하기",
     tags: ["React", "Chart.js", "데이터시각화"],
-    contentPath: "/posts/project/DataVisualizationChartJS.md",
+    contentPath: `${
+      import.meta.env.BASE_URL
+    }/posts/project/DataVisualizationChartJS.md`,
   },
 ];

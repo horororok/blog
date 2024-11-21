@@ -27,7 +27,7 @@ export const StudyPostsSummary = [
     date: "2024-03-05",
     tags: ["자료구조", "스택"],
     summary: "스택 자료구조에 대해 알아봅니다.",
-    contentPath: "/posts/study/Stack.md",
+    contentPath: `${import.meta.env.BASE_URL}/posts/study/Stack.md`,
   },
   {
     id: 4,
@@ -37,7 +37,7 @@ export const StudyPostsSummary = [
     date: "2024-08-25",
     tags: ["알고리즘", "빅오 표기법"],
     summary: "빅오 표기법",
-    contentPath: "/posts/study/BigONotation.md",
+    contentPath: `${import.meta.env.BASE_URL}/posts/study/BigONotation.md`,
   },
   {
     id: 5,
@@ -47,6 +47,6 @@ export const StudyPostsSummary = [
     date: "2024-09-01",
     tags: ["자료구조", "배열", "객체", "성능", "JavaScript"],
     summary: "자바스크립트 배열과 객체의 성능",
-    contentPath: "/posts/study/ArrayAndObject.md",
+    contentPath: `${import.meta.env.BASE_URL}/posts/study/ArrayAndObject.md`,
   },
 ];
