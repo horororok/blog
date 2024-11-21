@@ -79,6 +79,16 @@ const PostMeta = styled.div`
   margin-bottom: 1rem;
 `;
 
+const TagContainer = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  touch-action: pan-x;
+`;
+
 const Tag = styled.span`
   background: ${(props) => (props.theme === "light" ? "#edf2f7" : "#4a5568")};
   padding: 0.25rem 0.75rem;
@@ -220,15 +230,13 @@ const LandingPage = () => {
                 <span>{post.section}</span>
               </PostMeta>
               <p>{post.summary}</p>
-              <div
-                style={{ display: "flex", gap: "0.5rem", marginTop: "1rem" }}
-              >
+              <TagContainer>
                 {post.tags.map((tag) => (
                   <Tag key={tag} theme={theme}>
                     {tag}
                   </Tag>
                 ))}
-              </div>
+              </TagContainer>
             </FeaturedPost>
           ))}
         </Grid>
