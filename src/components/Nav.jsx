@@ -48,8 +48,8 @@ const NavList = styled.ul`
 const SidebarContainer = styled.div`
   position: fixed;
   top: 0;
-  right: ${(props) => (props.isOpen ? "0" : "-300px")};
-  width: 300px;
+  right: ${(props) => (props.isOpen ? "0" : "-200px")};
+  width: 200px;
   height: 100vh;
   background-color: ${(props) =>
     props.theme === "light" ? "#ffffff" : "#1a1a1a"};

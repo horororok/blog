@@ -60,6 +60,11 @@ const ContactInfo = styled.div`
   display: flex;
   gap: 2rem;
   margin-bottom: 1.5rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
 `;
 
 const ContactLink = styled.a`
