@@ -11,7 +11,7 @@ import Posts from "./components/common/Posts";
 
 const Router = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/blog">
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<Main />}>
