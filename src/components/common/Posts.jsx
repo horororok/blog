@@ -67,10 +67,6 @@ const MarkdownContent = styled.div`
     padding: 0.5rem;
   }
 
-  th {
-    background-color: #f5f5f5;
-  }
-
   // 인용문 스타일링
   blockquote {
     border-left: 4px solid #646cff;
@@ -84,10 +80,26 @@ const MarkdownContent = styled.div`
     margin-right: 0.5rem;
   }
 
-  // 코드블록 마진 조정
+  p > code,
+  li > code,
+  td > code,
+  h1 > code,
+  h2 > code,
+  h3 > code {
+    background-color: #e9e9e9;
+    color: #db2777;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.9em;
+    font-family: monospace;
+  }
+
+  // 코드 블록 스타일링 (이미 SyntaxHighlighter에 의해 처리됨)
   pre {
+    font-size: 0.9rem;
     margin: 1rem 0;
     border-radius: 4px;
+    overflow: auto;
   }
 
   // 인라인 코드 스타일링

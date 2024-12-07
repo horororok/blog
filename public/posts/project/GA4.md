@@ -1,25 +1,29 @@
-# React에서 Google Analytics 4(GA4) API 연동
+프로젝트에서 Google Analytics와 연동하여 데이터를 가져와 보여줘야 하는 기능을 만드는 과정을 정리하고 기록해 보았다.
 
-Google Analytics 4(GA4)의 데이터를 React 애플리케이션에서 활용하는 방법에 대해 상세히 알아보겠습니다. OAuth 2.0 인증부터 데이터 가져오기까지 전체 과정을 다루겠습니다.
+Google Analytics 4(GA4)의 데이터를 React 애플리케이션에서 활용하는 방법입니다. OAuth 2.0 인증부터 데이터 가져오기까지 전체 과정입니다.
 
 ## 목차
 
-1. [사전 준비](#prerequisites)
-2. [GA4 API 설정](#setup)
-3. [OAuth 2.0 인증 구현](#oauth)
-4. [데이터 가져오기](#fetching-data)
-5. [상태 관리와 통합](#state-management)
-6. [실제 구현 예제](#implementation)
-7. [보안 고려사항](#security)
+1. [사전 준비]
+2. [GA4 API 설정]
+3. [OAuth 2.0 인증 구현]
+4. [데이터 가져오기]
+5. [상태 관리와 통합]
+6. [실제 구현 예제]
+7. [보안 고려사항]
 
-## 사전 준비 {#prerequisites}
+## 사전 준비
 
 ### 필요한 사항들
 
-1. Google Cloud Console 프로젝트
-2. GA4 속성
-3. OAuth 2.0 클라이언트 자격증명
-4. 필요한 패키지 설치
+- Google Cloud Console 프로젝트
+  - GA4 api를 사용하기 위한 기본 프로젝트
+- GA4 속성
+  - 추적하고자하는 웹사이트의 GA4 설정
+- OAuth 2.0 클라이언트 자격증명
+  - API 인증을 위한 필수요소
+- 필요한 패키지 설치
+  - 데이터 요청과 상태관리를 위한 기본 라이브러리
 
 ```bash
 npm install axios @reduxjs/toolkit react-redux
@@ -27,35 +31,45 @@ npm install axios @reduxjs/toolkit react-redux
 
 ### 환경 변수 설정
 
-```env
+```
 VITE_GA4_CLIENT_ID=your_client_id
 VITE_GA4_CLIENT_SECRET=your_client_secret
 VITE_GA4_OAUTH_REFRESH_TOKEN=your_refresh_token
 VITE_GA4_PROPERTY_ID=your_property_id
 ```
 
-## GA4 API 설정 {#setup}
+- 보안을 위해 민감한 정보들은 환경변수로 관리한다.(클라이언트id, 시크릿 키 등)
+
+## GA4 API 설정
+
+GA4 데이터에 접근하기 위한 API 설정 과정
 
 ### 1. Google Cloud Console 설정
 
 1. Google Cloud Console에서 새 프로젝트 생성
 2. Google Analytics Data API 활성화
-3. OAuth 2.0 클라이언트 ID 및 비밀키 생성
+3. OAuth 2.0 클라이언트 ID 및 비밀키(시크릿) 생성
 
 ### 2. 필요한 권한 설정
 
-```javascript
+GA4 데이터 접근에 필요한 최소한의 권한 범위를 정의하는 것이다.
+
+```jsx
 const REQUIRED_SCOPES = [
-  "https://www.googleapis.com/auth/analytics.readonly",
-  "https://www.googleapis.com/auth/analytics.report.readonly",
+  "<https://www.googleapis.com/auth/analytics.readonly>",
+  "<https://www.googleapis.com/auth/analytics.report.readonly>",
 ];
 ```
 
-## OAuth 2.0 인증 구현 {#oauth}
+## OAuth 2.0 인증 구현
+
+구글 API 사용을 위한 인증 처리 로직
 
 ### 액세스 토큰 획득
 
-```typescript
+리프레시 토큰을 이용해 실제 API 호출에 사용할 액세스 토큰 발급받기
+
+```tsx
 interface TokenResponse {
   access_token: string;
   expires_in: number;
@@ -65,7 +79,7 @@ interface TokenResponse {
 const getAccessToken = async (): Promise<string> => {
   try {
     const response = await axios.post<TokenResponse>(
-      "https://oauth2.googleapis.com/token",
+      "<https://oauth2.googleapis.com/token>",
       {
         client_id: import.meta.env.VITE_GA4_CLIENT_ID,
         client_secret: import.meta.env.VITE_GA4_CLIENT_SECRET,
@@ -82,11 +96,13 @@ const getAccessToken = async (): Promise<string> => {
 };
 ```
 
-## 데이터 가져오기 {#fetching-data}
+## 데이터 가져오기
+
+실제 GA 로부터 데이터를 요청하고 받아오는 부분이다.
 
 ### API 요청 인터페이스 정의
 
-```typescript
+```tsx
 interface GA4RequestBody {
   dimensions: Array<{ name: string }>;
   metrics: Array<{ name: string }>;
@@ -117,7 +133,7 @@ interface GA4Response {
 
 ### 데이터 가져오기 함수
 
-```typescript
+```tsx
 const fetchGA4Data = async (
   accessToken: string,
   requestBody: GA4RequestBody
@@ -143,11 +159,15 @@ const fetchGA4Data = async (
 };
 ```
 
-## 상태 관리와 통합 {#state-management}
+## 상태 관리와 통합
+
+Redux 를 사용하였기 때문에 관련하여 설정해 주었다.
 
 ### Redux 슬라이스 설정
 
-```typescript
+리덕스 상태 구조와 액션 정의
+
+```tsx
 // gaSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
@@ -192,11 +212,13 @@ export const {
 export default gaSlice.reducer;
 ```
 
-## 실제 구현 예제 {#implementation}
+## 실제 구현 예제
 
 ### Custom Hook 구현
 
-```typescript
+데이터 fetching 로직을 커스텀 훅으로 구현
+
+```tsx
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../store/store";
@@ -257,7 +279,7 @@ export const useDateReportAPI = () => {
 
 ### 컴포넌트에서 사용
 
-```typescript
+```tsx
 import { useDateReportAPI } from "./hooks/useGA4";
 
 const AnalyticsComponent = () => {
@@ -270,21 +292,17 @@ const AnalyticsComponent = () => {
 };
 ```
 
-## 보안 고려사항 {#security}
+## 보안 고려사항
 
 1. **환경 변수 관리**
-
    - 민감한 정보는 반드시 환경 변수로 관리
    - .env 파일을 .gitignore에 포함
-
 2. **토큰 관리**
-
    - 액세스 토큰은 메모리에만 저장
    - 리프레시 토큰은 안전하게 보관
-
 3. **에러 처리**
 
-```typescript
+```tsx
 const handleError = (error: any) => {
   if (error.response) {
     switch (error.response.status) {
@@ -305,7 +323,9 @@ const handleError = (error: any) => {
 
 1. **데이터 캐싱**
 
-```typescript
+불필요한 API 호출을 줄일 수 있다.
+
+```tsx
 const CACHE_DURATION = 5 * 60 * 1000; // 5분
 let cachedData = null;
 let lastFetchTime = 0;
@@ -323,9 +343,11 @@ const getCachedOrFetchData = async () => {
 };
 ```
 
-2. **재시도 로직**
+1. **재시도 로직**
 
-```typescript
+네트워크 오류 등에 대응하기 위한 재시도 로직
+
+```tsx
 const fetchWithRetry = async (fn: () => Promise<any>, retries = 3) => {
   try {
     return await fn();
@@ -341,14 +363,6 @@ const fetchWithRetry = async (fn: () => Promise<any>, retries = 3) => {
 
 ## 결론
 
-GA4 API 연동은 다음 단계들을 포함합니다:
-
-1. 적절한 설정과 권한 획득
-2. OAuth 2.0 인증 구현
-3. 데이터 요청 및 처리
-4. 상태 관리와의 통합
-5. 보안 고려사항 적용
-
 성공적인 구현을 위해서는:
 
 - 에러 처리
@@ -356,14 +370,11 @@ GA4 API 연동은 다음 단계들을 포함합니다:
 - 성능 최적화
 - 보안 고려사항
 
-을 반드시 고려해야 합니다.
+을 고려해야 한다.
 
-추가로 다음과 같은 내용을 더 다룰 수 있습니다:
+## 마무리
 
-- 더 많은 메트릭과 디멘션
-- 데이터 시각화 방법
-- 실시간 데이터 처리
-- 에러 처리 상세 전략
+GA4 관련 문서나 레퍼런스가 부족했지만, 공식 문서와 다양한 자료들을 참고하여 성공적으로 연동을 완료할 수 있었다. 이 과정에서 OAuth 2.0 인증부터 데이터 처리까지 전반적인 흐름을 이해할 수 있었다. 앞으로 실시간 데이터 처리 구현, 에러 처리 및 복구 로직, 데이터 시각화, 최적화 등의 개선사항을 통해 더 안정적인 GA 연동 시스템을 만들 수 있을 거라고 생각한다.
 
 ## 참고 자료
 

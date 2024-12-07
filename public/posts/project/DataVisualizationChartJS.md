@@ -1,16 +1,18 @@
 # React에서 Chart.js 를 활용한 데이터 시각화
 
-GA를 통해 가져온 데이터를 Chart.js를 활용하여 시각화하였습니다.
+GA를 통해 가져온 데이터를 Chart.js를 활용하여 시각화한 과정을 기록해 보았다. Chart.js는 웹에서 데이터 시각화를 구현할 때 가장 많이 사용되는 라이브러리 중 하나로, React와의 통합이 쉽고 다양한 커스터마이징 옵션을 제공한다.
 
 ## 목차
 
-1. [기본 설정](#setup)
-2. [차트 종류별 구현](#chart-types)
-3. [스타일링과 커스터마이징](#styling)
-4. [인터랙티브 기능](#interactive)
-5. [성능 최적화](#optimization)
+1. [기본 설정]
+2. [차트 종류별 구현]
+3. [스타일링과 커스터마이징]
+4. [인터랙티브 기능]
+5. [성능 최적화]
 
-## 기본 설정 {#setup}
+## 기본 설정
+
+Chart.js를 React 프로젝트에서 사용하기 위한 기본적인 설정 방법이다.
 
 ### 필요한 패키지 설치
 
@@ -18,9 +20,14 @@ GA를 통해 가져온 데이터를 Chart.js를 활용하여 시각화하였습�
 npm install chart.js react-chartjs-2 styled-components
 ```
 
+- react-chartjs-2는 React 컴포넌트로 차트를 쉽게 사용할 수 있게 해주는 래퍼 라이브러리이다
+- 차트 컨테이너의 스타일링을 위해 styled-components 사용
+
 ### 기본 차트 컴포넌트 설정
 
-```typescript
+Chart.js는 모듈러 방식으로 설계되어 있어, 필요한 컴포넌트만 선택적으로 등록하여 사용할 수 있다. 이는 번들 크기를 최적화하는 데 도움이 된다.
+
+```tsx
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -47,7 +54,7 @@ ChartJS.register(
 
 ### 타입 정의
 
-```typescript
+```tsx
 interface ChartDataPoint {
   date: string;
   value: number;
@@ -60,11 +67,16 @@ interface ChartProps {
 }
 ```
 
-## 차트 종류별 구현 {#chart-types}
+## 차트 종류별 구현
+
+각 차트 타입별 구현 방법
+Chart.js는 다양한 차트 타입을 제공하며, 데이터를 효과적으로 표현할 수 있는 용도에 따라 각 차트를 골라 사용한다.
 
 ### 1. 라인 차트 구현
 
-```typescript
+라인 차트는 시계열 데이터를 표현하는 데 가장 적합한 차트 타입이다. 시간에 따른 변화나 추세를 파악하기 쉽다.
+
+```tsx
 import { Line } from "react-chartjs-2";
 
 interface LineChartProps {
@@ -112,7 +124,9 @@ const LineChart: React.FC<LineChartProps> = ({ data }) => {
 
 ### 2. 멀티 라인 차트
 
-```typescript
+여러 지표를 동시에 비교해야 할 때 사용하는 차트 타입이다. 각 라인의 색상과 스타일을 다르게 설정하여 구분을 쉽게 할 수 있다.
+
+```tsx
 interface MultiLineDataProps {
   date: string;
   metric1: number;
@@ -151,7 +165,9 @@ const MultiLineChart: React.FC<{ data: MultiLineDataProps[] }> = ({ data }) => {
 
 ### 3. 커스텀 스타일링
 
-```typescript
+styled-components를 사용하여 차트 컨테이너를 스타일링하였고, Chart.js의 옵션을 통해 차트 내부 요소들의 스타일을 조정하였다.
+
+```tsx
 const StyledChartContainer = styled.div`
   height: 400px;
   width: 100%;
@@ -202,11 +218,13 @@ const options = {
 };
 ```
 
-## 인터랙티브 기능 구현 {#interactive}
+## 인터랙티브 기능 구현
 
 ### 1. 클릭 이벤트 처리
 
-```typescript
+Chart.js에서 지원하는 다양한 이벤트 핸들링을 통해 차트의 데이터 포인트를 클릭했을 때 해당 데이터의 상세 정보를 표시하거나 추가 작업을 수행할 수 있다.
+
+```tsx
 const ChartWithInteraction: React.FC<ChartProps> = ({ data }) => {
   const handleClick = (event: any) => {
     const points = event.chart.getElementsAtEventForMode(
@@ -233,7 +251,9 @@ const ChartWithInteraction: React.FC<ChartProps> = ({ data }) => {
 
 ### 2. 동적 데이터 업데이트
 
-```typescript
+setInterval을 사용해서 주시적으로 테이터를 업데이트 해 주었다.
+
+```tsx
 const DynamicChart: React.FC = () => {
   const [chartData, setChartData] = useState<ChartData>({
     labels: [],
@@ -264,11 +284,15 @@ const DynamicChart: React.FC = () => {
 };
 ```
 
-## 성능 최적화 {#optimization}
+## 성능 최적화
+
+대량의 데이터 처리 또는 실시간 업게이트가 필요한 경우를 위한 성능 최적화 방법
 
 ### 1. 메모이제이션 사용
 
-```typescript
+React의 useMemo() 를 사용해서 불필요한 차트 데이터 재계산을 방지한다.
+
+```tsx
 import { useMemo } from "react";
 
 const OptimizedChart: React.FC<ChartProps> = ({ data }) => {
@@ -292,7 +316,9 @@ const OptimizedChart: React.FC<ChartProps> = ({ data }) => {
 
 ### 2. 데이터 샘플링
 
-```typescript
+대용량 데이터셋을 처리할 때 모든 데이터 포인트를 표시하면 성능 저하가 발생할 수 있다. 이때 데이터 샘플링을 통해 적절한 수의 데이ㅌㅓ 포인트만 표시하여 성능 개선을 할 수 있다.
+
+```tsx
 const sampleData = (data: DataPoint[], sampleSize: number) => {
   const step = Math.ceil(data.length / sampleSize);
   return data.filter((_, index) => index % step === 0);
@@ -308,11 +334,11 @@ const LargeDatasetChart: React.FC<{ data: DataPoint[] }> = ({ data }) => {
 };
 ```
 
-## 실제 구현 예제
+## 실제 구현
 
 ### 사용자 활동 분석 차트
 
-```typescript
+```tsx
 interface AUDataProps {
   date: string;
   dauPerMau: string;
@@ -391,5 +417,4 @@ Chart.js와 React를 함께 사용하면:
 ## 참고 자료
 
 - [Chart.js 공식 문서](https://www.chartjs.org/)
-- [react-chartjs-2 문서](https://react-chartjs-2.js.org/)
 - [Chart.js 성능 최적화 가이드](https://www.chartjs.org/docs/latest/general/performance.html)
